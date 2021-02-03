@@ -199,7 +199,7 @@ if (defined($opt{'id'})) {
     seek(FILE, 440, SEEK_SET) or die "$0: $file: $!\n";
     read(FILE, $id, 4);
     if ($id eq "\x00\x00\x00\x00") {
-	$id = pack("V", get_random());
+	$id = pack("V", $ENV{SOURCE_DATE_EPOCH} || get_random());
     }
 }
 

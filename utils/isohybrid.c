@@ -948,6 +948,8 @@ main(int argc, char *argv[])
     FILE *fp = NULL;
     uint8_t *buf = NULL, *bufz = NULL;
     int cylsize = 0, frac = 0;
+    int randseed;
+    char *source_date_epoch;
     size_t orig_gpt_size, free_space, gpt_size;
     struct iso_primary_descriptor descriptor;
 
@@ -965,7 +967,10 @@ main(int argc, char *argv[])
     if ((mode & EFI) && offset)
 	errx(1, "%s: --offset is invalid with UEFI images\n", argv[0]);
 
-    srand(time(NULL) ^ (getppid()<<2) ^ getpid());
+    if((source_date_epoch = getenv("SOURCE_DATE_EPOCH")) == NULL ||
+       (randseed = strtol(source_date_epoch, NULL, 10)) <= 0)
+        randseed = time(NULL) ^ (getppid()<<2) ^ getpid();
+    srand(randseed);
 
     if (!(fp = fopen(argv[0], "rb+")))
         err(1, "could not open file `%s'", argv[0]);
