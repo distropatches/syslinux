@@ -38,7 +38,7 @@ all:	mbr.bin   altmbr.bin   gptmbr.bin   isohdpfx.bin   isohdppx.bin \
 	$(LD) $(LDFLAGS) -T $(SRC)/$(ARCH)/mbr.ld -e _start -o $@ $<
 
 %.bin: %.elf $(SRC)/checksize.pl
-	$(OBJCOPY) -O binary $< $@
+	$(OBJCOPY) -O binary --remove-section .note.gnu.property $< $@
 	$(PERL) $(SRC)/checksize.pl $@
 	$(CHMOD) -x $@
 
