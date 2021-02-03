@@ -965,7 +965,7 @@ main(int argc, char *argv[])
     if ((mode & EFI) && offset)
 	errx(1, "%s: --offset is invalid with UEFI images\n", argv[0]);
 
-    srand(time(NULL) << (getppid() << getpid()));
+    srand(time(NULL) ^ (getppid()<<2) ^ getpid());
 
     if (!(fp = fopen(argv[0], "rb+")))
         err(1, "could not open file `%s'", argv[0]);
